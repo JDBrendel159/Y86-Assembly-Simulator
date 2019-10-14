@@ -1,0 +1,46 @@
+0x000:                      |           .pos 0
+0x000: 30f40004000000000000 | main:     irmovq stack, %rsp                
+0x00a: 30f71400000000000000 |           irmovq $20, %rdi
+0x014: 30fe0100000000000000 |           irmovq $1, %r14
+0x01e: 30f80800000000000000 |           irmovq $8, %r8                                             
+0x028: 30f6b000000000000000 |           irmovq fibolst, %rsi
+0x032: 803c00000000000000   |           call fibo
+0x03b: 00                   |           halt
+                            | 
+0x03c:                      | fibo:                                    
+0x03c: 60ed                 |           addq %r14, %r13
+0x03e: 60ec                 |           addq %r14, %r12
+0x040: 30f10100000000000000 |           irmovq $1, %rcx
+0x04a: 30f30100000000000000 |           irmovq $1, %rbx
+0x054:                      | loop:
+0x054: a02f                 |           pushq %rdx
+0x056: 6086                 |           addq %r8, %rsi
+0x058: 617c                 |           subq %rdi, %r12
+0x05a: 737800000000000000   |           je listpop
+0x063: 2023                 |           rrmovq %rdx, %rbx
+0x065: 6012                 |           addq %rcx, %rdx
+0x067: 2031                 |           rrmovq %rbx, %rcx
+0x069: 20dc                 |           rrmovq %r13, %r12
+0x06b: 60ed                 |           addq %r14, %r13
+0x06d: 60ec                 |           addq %r14, %r12
+0x06f: 705400000000000000   |           jmp loop
+0x078:                      | listpop:
+0x078: 30fc0100000000000000 |           irmovq $1, %r12
+0x082: 61db                 |           subq %r13, %r11
+0x084: 73a800000000000000   |           je done
+0x08d: 20eb                 |           rrmovq %r14, %r11
+0x08f: 60ce                 |           addq %r12, %r14
+0x091: b00f                 |           popq %rax
+0x093: 40060000000000000000 |           rmmovq %rax, (%rsi)
+0x09d: 6186                 |           subq %r8, %rsi
+0x09f: 707800000000000000   |           jmp listpop
+0x0a8: 90                   | done:     ret
+                            |            
+0x0b0:                      |           .align 8
+0x0b0: 0000000000000000     | fibolst:  .quad 0 
+0x400:                      |           .pos 0x400 
+0x400:                      | stack:    
+                            | 
+                            | #get the address of the list and then increment by 8, every time a number is added.
+                            | #keep count of how many numbers have been added
+                            | 

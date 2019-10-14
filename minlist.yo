@@ -1,0 +1,38 @@
+0x000:                      |          .pos 0
+0x000: 30f40002000000000000 |          irmovq stack, %rsp
+0x00a: 30f77000000000000000 |          irmovq list, %rdi
+0x014: 30f30800000000000000 |          irmovq $8, %rbx
+0x01e: 802800000000000000   |          call minList
+0x027: 00                   |          halt
+                            | 
+                            | # minList: return the minimum value of the elements of a NULL terminated list
+                            | # parameter: %rdi contains the value list, which
+                            | #            is the adress of the first element in the list
+                            | # return: %rax contains the minimum value in the list
+0x028:                      | minList: 
+0x028: 50070000000000000000 |          mrmovq (%rdi), %rax
+0x032:                      | loop:
+0x032: 50170000000000000000 |          mrmovq (%rdi), %rcx
+0x03c: 50270000000000000000 |          mrmovq (%rdi), %rdx
+0x046: 6211                 |          andq %rcx, %rcx
+0x048: 736900000000000000   |          je done
+0x051: 6101                 |          subq %rax, %rcx
+0x053: 755e00000000000000   |          jge bigger
+0x05c: 2020                 |          rrmovq %rdx, %rax
+0x05e:                      | bigger:
+0x05e: 6037                 |          addq %rbx, %rdi
+0x060: 703200000000000000   |          jmp loop
+0x069:                      | done:
+0x069: 90                   |          ret  
+0x070:                      |          .align 8
+0x070: 1600000000000000     | list:    .quad 22
+0x078: 3500000000000000     |          .quad 53
+0x080: f9ffffffffffffff     |          .quad -7 
+0x088: 0100000000000000     |          .quad 1
+0x090: feffffffffffffff     |          .quad -2
+0x098: 2a00000000000000     |          .quad 42
+0x0a0: fbffffffffffffff     |          .quad -5
+0x0a8: 0000000000000000     |          .quad 0  #indicates the end of the list
+                            | #
+0x200:                      |          .pos 0x200
+0x200:                      | stack:

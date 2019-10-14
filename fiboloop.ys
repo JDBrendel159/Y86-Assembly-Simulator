@@ -1,0 +1,46 @@
+          .pos 0
+main:     irmovq stack, %rsp                
+          irmovq $20, %rdi
+          irmovq $1, %r14
+          irmovq $8, %r8                                             
+          irmovq fibolst, %rsi
+          call fibo
+          halt
+
+fibo:                                    
+          addq %r14, %r13
+          addq %r14, %r12
+          irmovq $1, %rcx
+          irmovq $1, %rbx
+loop:
+          pushq %rdx
+          addq %r8, %rsi
+          subq %rdi, %r12
+          je listpop
+          rrmovq %rdx, %rbx
+          addq %rcx, %rdx
+          rrmovq %rbx, %rcx
+          rrmovq %r13, %r12
+          addq %r14, %r13
+          addq %r14, %r12
+          jmp loop
+listpop:
+          irmovq $1, %r12
+          subq %r13, %r11
+          je done
+          rrmovq %r14, %r11
+          addq %r12, %r14
+          popq %rax
+          rmmovq %rax, (%rsi)
+          subq %r8, %rsi
+          jmp listpop
+done:     ret
+           
+          .align 8
+fibolst:  .quad 0 
+          .pos 0x400 
+stack:    
+
+#get the address of the list and then increment by 8, every time a number is added.
+#keep count of how many numbers have been added
+
